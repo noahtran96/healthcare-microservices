@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { BookingModalProps } from "../types";
+import type { BookingModalProps } from "@/types";
 import { Calendar, X } from "lucide-react";
-import { MOCK_SLOTS } from "../data/mockData";
+import { MOCK_SLOTS } from "@/data/mockData";
 
 export const BookingModal = ({
   isOpen,

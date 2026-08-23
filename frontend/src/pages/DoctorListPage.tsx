@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { MOCK_DOCTORS } from "../data/mockData";
-import type { Doctor } from "../types";
-import { BookingModal } from "../components/BookingModal";
+import { MOCK_DOCTORS } from "@/data/mockData";
+import type { Doctor } from "@/types";
+import { BookingModal } from "@/components/BookingModal";
 
 export const DoctorListPage = () => {
   // State management

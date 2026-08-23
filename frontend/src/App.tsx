@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
-import { Navbar } from "./components/Navbar";
-import { DoctorListPage } from "./pages/DoctorListPage";
+import { Navbar } from "@/components/Navbar";
+import { DoctorListPage } from "@/pages/DoctorListPage";
 
 const RootLayout = () => {
   return (
