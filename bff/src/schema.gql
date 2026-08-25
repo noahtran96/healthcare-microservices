@@ -1,0 +1,39 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Appointment {
+  date: String!
+  doctorId: String!
+  doctorName: String!
+  id: ID!
+  patientName: String!
+  status: String!
+  timeSlot: String!
+}
+
+input CreateAppointmentInput {
+  date: String!
+  doctorId: String!
+  patientName: String!
+  timeSlot: String!
+}
+
+type Doctor {
+  avatar: String!
+  hospital: String!
+  id: ID!
+  name: String!
+  price: Float!
+  rating: Float!
+  specialty: String!
+}
+
+type Mutation {
+  createAppointment(input: CreateAppointmentInput!): Appointment!
+}
+
+type Query {
+  appointments: [Appointment!]!
+  doctors: [Doctor!]!
+}
