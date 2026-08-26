@@ -11,6 +11,9 @@ export class Appointment {
   @Field()
   doctorName: string;
 
+  @Field({ nullable: true })
+  specialty?: string;
+
   @Field()
   patientName: string;
 

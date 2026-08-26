@@ -2,6 +2,23 @@ import { useState } from "react";
 import type { BookingModalProps } from "@/types";
 import { Calendar, X } from "lucide-react";
 import { MOCK_SLOTS } from "@/data/mockData";
+import { gql } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
+
+// GraphQL mutation
+const CREATE_APPOINTMENT = gql`
+  mutation CreateAppointment($input: CreateAppointmentInput!) {
+    createAppointment(input: $input) {
+      id
+      doctorId
+      doctorName
+      patientName
+      date
+      timeSlot
+      status
+    }
+  }
+`;
 
 export const BookingModal = ({
   isOpen,
@@ -11,16 +28,36 @@ export const BookingModal = ({
   // State of the currently selected slot
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
 
+  // BFF mutation hook
+  const [createAppointment, { loading }] = useMutation(CREATE_APPOINTMENT, {
+    onCompleted: () => {
+      alert("Appointment successfully booked!");
+      onClose();
+      setSelectedSlotId(null);
+    },
+    onError: (err) => {
+      alert(`Appointment booking failed: ${err.message}`);
+    },
+    refetchQueries: ["GetAppointments"],
+  });
+
   // Hide modal when the modal is not open or no doctor is selected
   if (!isOpen || !doctor) return null;
 
   const handleConfirm = () => {
-    if (!selectedSlotId) return;
-    alert(
-      `Booking confirmed! Doctor: ${doctor.name}, Slot ID: ${selectedSlotId}`,
-    );
-    onClose();
-    setSelectedSlotId(null); // Reset slot
+    const slot = MOCK_SLOTS.find((slot) => slot.id === selectedSlotId);
+    if (!slot) return;
+
+    createAppointment({
+      variables: {
+        input: {
+          doctorId: doctor.id,
+          patientName: "John Doe",
+          date: "2026-08-26",
+          timeSlot: slot.time,
+        },
+      },
+    });
   };
 
   return (
@@ -76,7 +113,7 @@ export const BookingModal = ({
             disabled={!selectedSlotId}
             className={`w-full py-3 rounded-xl font-semibold transition ${selectedSlotId ? "bg-blue-600 hover:bg-blue-700 text-white shadow-md" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
           >
-            Confirm Booking (${doctor.price})
+            {loading ? "Processing..." : `Confirm Booking (${doctor.price})`}
           </button>
         </div>
       </div>

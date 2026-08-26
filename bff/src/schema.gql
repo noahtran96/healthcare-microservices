@@ -8,6 +8,7 @@ type Appointment {
   doctorName: String!
   id: ID!
   patientName: String!
+  specialty: String
   status: String!
   timeSlot: String!
 }
@@ -30,6 +31,7 @@ type Doctor {
 }
 
 type Mutation {
+  cancelAppointment(id: ID!): Appointment!
   createAppointment(input: CreateAppointmentInput!): Appointment!
 }
 

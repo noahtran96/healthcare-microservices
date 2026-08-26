@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Appointment } from './models/appointment.model';
 import { CreateAppointmentInput } from './dto/create-appointment.input';
 
@@ -34,5 +34,17 @@ export class AppointmentsResolver {
     };
     this.appointments.push(newAppointment);
     return newAppointment;
+  }
+
+  @Mutation(() => Appointment)
+  cancelAppointment(@Args('id', { type: () => ID }) id: string): Appointment {
+    const appointment = this.appointments.find(
+      (appointment) => appointment.id === id,
+    );
+    if (!appointment) {
+      throw new Error('Appointment not found');
+    }
+    appointment.status = 'CANCELLED';
+    return appointment;
   }
 }

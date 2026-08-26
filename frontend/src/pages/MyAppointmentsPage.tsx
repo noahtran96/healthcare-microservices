@@ -1,22 +1,64 @@
-import { MOCK_APPOINTMENTS } from "@/data/mockData";
 import type { Appointment } from "@/types";
+import { gql } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { Calendar, Clock, User, XCircle } from "lucide-react";
-import { useState } from "react";
+
+const GET_APPOINTMNETS = gql`
+  query GetAppointments {
+    appointments {
+      id
+      doctorId
+      doctorName
+      specialty
+      patientName
+      date
+      timeSlot
+      status
+    }
+  }
+`;
+
+// Appointment cancel mutation
+const CANCEL_APPOINTMENT = gql`
+  mutation CancelAppointment($id: ID!) {
+    cancelAppointment(id: $id) {
+      id
+      status
+    }
+  }
+`;
+
+interface GetAppointmentsResponse {
+  appointments: Appointment[];
+}
 
 export const MyAppointmentsPage = () => {
-  // State management
-  const [appointments, setAppointments] =
-    useState<Appointment[]>(MOCK_APPOINTMENTS);
+  // GraphQL query
+  const { loading, error, data } =
+    useQuery<GetAppointmentsResponse>(GET_APPOINTMNETS);
+
+  // Cancel hook
+  const [cancelAppointment] = useMutation(CANCEL_APPOINTMENT, {
+    refetchQueries: [{ query: GET_APPOINTMNETS }],
+  });
+
+  // Loading and error state handler
+  if (loading)
+    return (
+      <div className="text-center py-12 text-gray-500">
+        Loading appointments...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="text-center py-12 text-red-500">
+        Error: {error.message}
+      </div>
+    );
 
   const handleCancel = (id: string) => {
     if (confirm("Are you sure you want to cancel this appointment?")) {
-      setAppointments((prev) =>
-        prev.map((appointment) =>
-          appointment.id === id
-            ? { ...appointment, status: "CANCELLED" }
-            : appointment,
-        ),
-      );
+      cancelAppointment({ variables: { id } });
     }
   };
 
@@ -49,7 +91,7 @@ export const MyAppointmentsPage = () => {
       </h1>
 
       <div className="space-y-4">
-        {appointments.map((appointment) => (
+        {data?.appointments.map((appointment) => (
           <div
             key={appointment.id}
             className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4"
