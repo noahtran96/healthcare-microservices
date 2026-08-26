@@ -1,12 +1,35 @@
 import { useState } from "react";
-import { MOCK_DOCTORS } from "@/data/mockData";
 import type { Doctor } from "@/types";
 import { BookingModal } from "@/components/BookingModal";
+import { gql } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
+
+// GraphQL query
+const GET_DOCTORS = gql`
+  query GetDoctors {
+    doctors {
+      id
+      name
+      specialty
+      hospital
+      avatar
+      rating
+      price
+    }
+  }
+`;
+
+interface GetDoctorsResponse {
+  doctors: Doctor[];
+}
 
 export const DoctorListPage = () => {
   // State management
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+
+  // API via Apollo Client
+  const { loading, error, data } = useQuery<GetDoctorsResponse>(GET_DOCTORS);
 
   // Event handlers
   const handleOpenModal = (doctor: Doctor) => {
@@ -19,13 +42,28 @@ export const DoctorListPage = () => {
     setSelectedDoctor(null);
   };
 
+  // Handle Loading and Error states
+  if (loading)
+    return (
+      <div className="text-center py-12 text-gray-500">
+        Loading doctor information...
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="text-center py-12 text-red-500">
+        Error loading doctors: {error.message}
+      </div>
+    );
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">
         Book an Appointment with a Specialist
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {MOCK_DOCTORS.map((doctor) => (
+        {data?.doctors.map((doctor: Doctor) => (
           <div
             key={doctor.id}
             className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition"

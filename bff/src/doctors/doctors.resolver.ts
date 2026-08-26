@@ -11,7 +11,7 @@ export class DoctorsResolver {
         name: 'Dr. Alex Mercer, MD',
         specialty: 'Cardiology',
         hospital: 'St. Jude Medical Center',
-        avatar: 'frontend/public/doc-1.png',
+        avatar: '/doc-1.png',
         rating: 4.9,
         price: 150,
       },
@@ -20,9 +20,18 @@ export class DoctorsResolver {
         name: 'Dr. Sarah Jenkins, PhD',
         specialty: 'Pediatrics',
         hospital: 'Mercy General Hospital',
-        avatar: 'frontend/public/doc-2.png',
+        avatar: '/doc-2.png',
         rating: 4.8,
         price: 120,
+      },
+      {
+        id: 'doc-3',
+        name: 'Dr. Michael Chen',
+        specialty: 'Dermatology',
+        hospital: 'City Care Clinic',
+        avatar: '/doc-3.png',
+        rating: 4.7,
+        price: 100,
       },
     ];
   }
