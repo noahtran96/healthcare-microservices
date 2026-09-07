@@ -25,6 +25,4 @@ export class Appointment {
 
   @Field()
   status: string;
-
-  @Field()
 }

@@ -4,23 +4,13 @@ import { CreateAppointmentInput } from './dto/create-appointment.input';
 
 @Resolver(() => Appointment)
 export class AppointmentsResolver {
-  private appointments: Appointment[] = [
-    {
-      id: 'app-1',
-      doctorId: 'doc-1',
-      doctorName: 'Dr. Alex Mercer, MD',
-      patientName: 'John Doe',
-      date: '2026-08-25',
-      timeSlot: '08:00 AM - 08:30 AM',
-      status: 'CONFIRMED',
-    },
-  ];
+  constructor(private readonly httpService: HttpService) {}
 
   @Query(() => [Appointment], { name: 'appointments' })
   getAppointments(): Appointment[] {
     return this.appointments;
   }
-
+  testing;
   @Mutation(() => Appointment)
   createAppointment(@Args('input') input: CreateAppointmentInput): Appointment {
     const newAppointment: Appointment = {
