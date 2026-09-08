@@ -11,6 +11,8 @@ export class AppointmentsResolver {
     return this.appointments;
   }
   testing;
+  testing;
+  testing;
   @Mutation(() => Appointment)
   createAppointment(@Args('input') input: CreateAppointmentInput): Appointment {
     const newAppointment: Appointment = {
@@ -26,15 +28,6 @@ export class AppointmentsResolver {
     return newAppointment;
   }
 
-  @Mutation(() => Appointment)
-  cancelAppointment(@Args('id', { type: () => ID }) id: string): Appointment {
-    const appointment = this.appointments.find(
-      (appointment) => appointment.id === id,
-    );
-    if (!appointment) {
-      throw new Error('Appointment not found');
-    }
-    appointment.status = 'CANCELLED';
-    return appointment;
+
   }
 }
