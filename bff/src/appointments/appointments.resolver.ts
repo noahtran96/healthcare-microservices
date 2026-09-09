@@ -13,21 +13,4 @@ export class AppointmentsResolver {
   testing;
   testing;
   testing;
-  @Mutation(() => Appointment)
-  createAppointment(@Args('input') input: CreateAppointmentInput): Appointment {
-    const newAppointment: Appointment = {
-      id: `app-${Date.now()}`,
-      doctorId: input.doctorId,
-      doctorName: 'Dr. Alex Mercer, MD',
-      patientName: input.patientName,
-      date: input.date,
-      timeSlot: input.timeSlot,
-      status: 'CONFIRMED',
-    };
-    this.appointments.push(newAppointment);
-    return newAppointment;
-  }
-
-
-  }
 }
